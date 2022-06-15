@@ -940,8 +940,14 @@ class Anime:
         # 推送通知至 Discord
         if self._settings['discord_notify']:
             try:
-                msg = '【aniGamerPlus消息】\n《' + self._video_filename + '》下載完成，本集 ' + str(self.video_size) + ' MB'
-                url = self._settings['discord_token']
+                msg = '\n《' + self._video_filename + '》下載完成，本集 ' + str(self.video_size) + ' MB'
+                # url = self._settings['discord_token']
+                url = 'https://discord.com/api/v10/channels/{discord_channel_id}/messages'.format(
+                    discord_channel_id=self._settings['discord_channel_id']
+                )
+                discord_headers = {
+                    "Authorization": "Bot {token}".format(token=self._settings['discord_token']),
+                }
                 data = {
                     'content': None,
                     'embeds': [{
@@ -951,10 +957,10 @@ class Anime:
                         'author': {
                             'name': '🔔 動畫瘋'
                         }}]}
-                r = requests.post(url, json=data)
-                if r.status_code != 204:
+                r = requests.post(url, json=data, headers=discord_headers)
+                if r.status_code != 200:
                     err_print(self._sn, 'discord NOTIFY ERROR', "Exception: Send msg error\nReq: " + r.text, status=1)
-            except:
+            except BaseException as e:
                 err_print(self._sn, 'Discord NOTIFY UNKNOWN ERROR', 'Exception: ' + str(e), status=1)
 
         # plex 自動更新媒體庫

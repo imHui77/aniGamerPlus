@@ -130,6 +130,7 @@ def __init_settings():
                 'telebot_chat_id': "",
                 'discord_notify': False,
                 'discord_token': '',
+                'discord_channel_id': '',
                 'plex_refresh': False,
                 'plex_url': '',
                 'plex_token': '',
@@ -266,6 +267,7 @@ def __update_settings(old_settings):  # 升级配置文件
         # 新增推送通知到TG的功能
         new_settings['discord_notify'] = False
         new_settings['discord_token'] = ''
+        new_settings['discord_channel_id'] = ''
 
     if 'plex_refresh' not in new_settings.keys():
         # 新增 plex 自動更新
